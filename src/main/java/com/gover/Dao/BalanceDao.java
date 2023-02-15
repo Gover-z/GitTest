@@ -1,6 +1,5 @@
 package com.gover.Dao;
 
-import com.gover.Mapper.UserMapper;
 import com.gover.Pojo.goodsPojo;
 import com.gover.Pojo.userPojo;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +61,7 @@ public class BalanceDao {
         double userBalance = userInfo.getALlBalance();
         double goodsBalance = goodsInfo.getGoodsPrice();
          if ( userBalance < goodsBalance){
-             // Insert into Order values (xxx,xxx,xxx,"待支付")
+             // 创建订单Insert into Order values (xxx,xxx,xxx,"待支付")
              return "余额不足，请及时充值";
          }
         // 用户钱包余额充足
@@ -70,9 +69,22 @@ public class BalanceDao {
          if (isUpdate){
              // 修改订单状态，变为 "已支付" update ec_order set order_type = '已支付' where user_id = user.getId();
              // 重新更新用户信息到缓存和前端
+             // 添加一条消费明细: insert into ec_balanceInfo set (xxx,xxx,xxx,orderInfo,2,dateTime)
              queryUserBalance(user.getUserId());
          }
          return "支付成功";
+    }
+
+    /**
+     * 用户退款
+     * @param user
+     * @return
+     */
+    @PostMapping("/refund")
+    public String userRefund(userPojo user,){
+        if (user == null){
+            return "用户不存在";
+        }
     }
 
 }
